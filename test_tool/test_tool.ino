@@ -1,88 +1,174 @@
 // Christopher McKinzie (subrosian@gmail.com)
 
-const int pacMarqueeUL = 0;
-const int pacMarqueeUR = 1;
-const int pacMarqueeLL = 2;
-const int pacMarqueeLR = 3;
-const int pacSubs = 4;
-const int pacPad1L = 5;
-const int pacPad1R = 6;
-const int pacPad1U = 7;
-const int pacPad1D = 8;
-const int pacControl1 = 9;
-const int pacPad2L = 10;
-const int pacPad2R = 11;
-const int pacPad2U = 12;
-const int pacPad2D = 14;
-const int pacControl2 = 15;
+const int pacInputNum = 15;
 
-const int buttonControl1L = 16;
-const int buttonControl1S = 17;
-const int buttonControl1R = 18;
-const int buttonControl2L = 19;
-const int buttonControl2S = 20;
-const int buttonControl2R = 21;
-const int buttonPad1L = 22;
-const int buttonPad1R = 23;
-const int buttonPad1U = 24;
-const int buttonPad1D = 25;
-const int buttonPad2L = 26;
-const int buttonPad2R = 27;
-const int buttonPad2U = 28;
-const int buttonPad2D = 29;
+enum pacInput {
+  pacMarqueeUL,
+  pacMarqueeUR,
+  pacMarqueeLL,
+  pacMarqueeLR,
+  pacSubs,
+  pacPad1L,
+  pacPad1R,
+  pacPad1U,
+  pacPad1D,
+  pacControl1,
+  pacPad2L,
+  pacPad2R,
+  pacPad2U,
+  pacPad2D,
+  pacControl2,
+};
 
-const int buttonBack = 30;
-const int buttonConfig = 32;
+typedef struct {
+  byte microInput;
+  byte oldState;
+} pacRef;
+
+pacRef pac[pacInputNum];
+
+const int buttonInputNum = 16;
+
+enum buttonInput {
+  buttonControl1L,
+  buttonControl1S,
+  buttonControl1R,
+  buttonControl2L,
+  buttonControl2S,
+  buttonControl2R,
+  buttonPad1L,
+  buttonPad1R,
+  buttonPad1U,
+  buttonPad1D,
+  buttonPad2L,
+  buttonPad2R,
+  buttonPad2U,
+  buttonPad2D,
+  buttonBack,
+  buttonConfig,
+};
+
+typedef struct {
+  byte microInput;
+  byte oldState;
+  byte usbButton;
+} buttonRef;
+
+buttonRef button[buttonInputNum];
 
 const int ledPin = 13;
 
 void setup() {
-  // put your setup code here, to run once:
+  pac[pacMarqueeUL].microInput = 0;
+  pac[pacMarqueeUR].microInput = 1;
+  pac[pacMarqueeLL].microInput = 2;
+  pac[pacMarqueeLR].microInput = 3;
+  pac[pacSubs].microInput = 4;
+  pac[pacPad1L].microInput = 5;
+  pac[pacPad1R].microInput = 6;
+  pac[pacPad1U].microInput = 7;
+  pac[pacPad1D].microInput = 8;
+  pac[pacControl1].microInput = 9;
+  pac[pacPad2L].microInput = 10;
+  pac[pacPad2R].microInput = 11;
+  pac[pacPad2U].microInput = 12;
+  pac[pacPad2D].microInput = 14;
+  pac[pacControl2].microInput = 15;
+
+  button[buttonControl1L].microInput = 16;
+  button[buttonControl1L].usbButton = 1;
+
+  button[buttonControl1S].microInput = 17;
+  button[buttonControl1S].usbButton = 2;
+
+  button[buttonControl1R].microInput = 18;
+  button[buttonControl1R].usbButton = 3;
+
+  button[buttonControl2L].microInput = 19;
+  button[buttonControl2L].usbButton = 4;
+
+  button[buttonControl2S].microInput = 20;
+  button[buttonControl2S].usbButton = 5;
+
+  button[buttonControl2R].microInput = 21;
+  button[buttonControl2R].usbButton = 6;
+
+  button[buttonPad1L].microInput = 22;
+  button[buttonPad1L].usbButton = 7;
+
+  button[buttonPad1R].microInput = 23;
+  button[buttonPad1R].usbButton = 8;
+
+  button[buttonPad1U].microInput = 24;
+  button[buttonPad1U].usbButton = 9;
+
+  button[buttonPad1D].microInput = 25;
+  button[buttonPad1D].usbButton = 10;
+
+  button[buttonPad2L].microInput = 26;
+  button[buttonPad2L].usbButton = 11;
+
+  button[buttonPad2R].microInput = 27;
+  button[buttonPad2R].usbButton = 12;
+
+  button[buttonPad2U].microInput = 28;
+  button[buttonPad2U].usbButton = 13;
+
+  button[buttonPad2D].microInput = 29;
+  button[buttonPad2D].usbButton = 14;
+
+  button[buttonBack].microInput = 30;
+  button[buttonBack].usbButton = 15;
+
+  button[buttonConfig].microInput = 32;
+  button[buttonConfig].usbButton = 16;
+
   Serial.begin(9600);
   Serial.println("INFO: Microcontroller Initialized");
   pinMode(ledPin, OUTPUT);
   digitalWrite(ledPin, HIGH);
-  
-  pinMode(pacMarqueeUL, INPUT_PULLUP);
-  pinMode(pacMarqueeUR, INPUT_PULLUP);
-  pinMode(pacMarqueeLL, INPUT_PULLUP);
-  pinMode(pacMarqueeLR, INPUT_PULLUP);
-  pinMode(pacSubs, INPUT_PULLUP);
-  pinMode(pacPad1L, INPUT_PULLUP);
-  pinMode(pacPad1R, INPUT_PULLUP);
-  pinMode(pacPad1U, INPUT_PULLUP);
-  pinMode(pacPad1D, INPUT_PULLUP);
-  pinMode(pacControl1, INPUT_PULLUP);
-  pinMode(pacPad2L, INPUT_PULLUP);
-  pinMode(pacPad2R, INPUT_PULLUP);
-  pinMode(pacPad2U, INPUT_PULLUP);
-  pinMode(pacPad2D, INPUT_PULLUP);
-  pinMode(pacControl2, INPUT_PULLUP);
-  
-  pinMode(buttonControl1L, INPUT_PULLUP);
-  pinMode(buttonControl1S, INPUT_PULLUP);
-  pinMode(buttonControl1R, INPUT_PULLUP);
-  pinMode(buttonControl2L, INPUT_PULLUP);
-  pinMode(buttonControl2S, INPUT_PULLUP);
-  pinMode(buttonControl2R, INPUT_PULLUP);
-  pinMode(buttonPad1L, INPUT_PULLUP);
-  pinMode(buttonPad1R, INPUT_PULLUP);
-  pinMode(buttonPad1U, INPUT_PULLUP);
-  pinMode(buttonPad1D, INPUT_PULLUP);
-  pinMode(buttonPad2L, INPUT_PULLUP);
-  pinMode(buttonPad2R, INPUT_PULLUP);
-  pinMode(buttonPad2U, INPUT_PULLUP);
-  pinMode(buttonPad2D, INPUT_PULLUP);
 
-  pinMode(buttonBack, INPUT_PULLUP);
-  pinMode(buttonConfig, INPUT_PULLUP);
+  //setup all pacinputs as inputs
+  for (int counter = 0; counter < pacInputNum; counter++) {
+    pinMode(pac[counter].microInput, INPUT_PULLUP);
+  }
+
+  //setup all the buttons as inputs
+  for (int counter = 0; counter < buttonInputNum; counter++) {
+    pinMode(button[counter].microInput, INPUT_PULLUP);
+  }
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  if (digitalRead(pacMarqueeUL) == HIGH) {
-    Serial.println("INFO: pacMarqueeUL is HIGH");
-  } else {
-    Serial.println("INFO: pacMarqueeUL is LOW");
+ //check all the pacinputs
+  for (int counter = 0; counter < pacInputNum; counter++) {
+    //if oldstate does NOT !equal new readstate do something
+    if (pac[counter].oldState != digitalRead(pac[counter].microInput)) {
+
+      //save new old value
+      pac[counter].oldState = digitalRead(pac[counter].microInput);
+
+      Serial.print("INFO:");
+      Serial.print(counter);
+      Serial.print(" is ");
+      Serial.println(digitalRead(pac[counter].microInput));
+    }
+  }
+  
+  //check all the buttons
+  for (int counter = 0; counter < buttonInputNum; counter++) {
+    //if oldstate does NOT !equal new readstate do something
+    if (button[counter].oldState != digitalRead(button[counter].microInput)) {
+
+      //save new old value
+      button[counter].oldState = digitalRead(button[counter].microInput);
+
+      Serial.print("INFO:");
+      Serial.print(counter);
+      Serial.print(" is ");
+      Serial.println(digitalRead(button[counter].microInput));
+      //send button state to joystick using oposite new oldstate since !(HIGH=1)=0 and !(LOW=0)=1
+      Joystick.button(button[counter].usbButton, !button[counter].oldState);
+    }
   }
 }
