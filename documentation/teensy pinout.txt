@@ -1,0 +1,18 @@
+I'm currently using the LumenAR wiring standard for the Pacdrive. When my custom board is made, I will lock this down and will not make any more changes.
+
+Teensy Pin	Pacdrive Pin	Description
+1		1		Pad1L
+2		2		Pad1R
+3 		3		Pad1U
+4		4		Pad1D
+5		5		Pad1L
+6		6		Pad1R
+7		7		Pad1U
+8		8		Pad1D
+9		9		MarqueeUL
+10		10		MarqueeUR
+11		11		MarqueeLL
+12		12		MarqueeLR
+14		13		Control1
+15		14		Control2
+16		15		Subs

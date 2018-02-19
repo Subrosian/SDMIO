@@ -4,21 +4,21 @@ const int pacInputNum = 16;
 
 enum pacInput {
   pacNull,
-  pacMarqueeUL,
-  pacMarqueeUR,
-  pacMarqueeLL,
-  pacMarqueeLR,
-  pacSubs,
   pacPad1L,
   pacPad1R,
   pacPad1U,
   pacPad1D,
-  pacControl1,
   pacPad2L,
   pacPad2R,
   pacPad2U,
   pacPad2D,
+  pacMarqueeUL,
+  pacMarqueeUR,
+  pacMarqueeLL,
+  pacMarqueeLR,
+  pacControl1,
   pacControl2,
+  pacSubs,
 };
 
 typedef struct {
@@ -62,21 +62,21 @@ buttonRef button[buttonInputNum];
 const int ledPin = 13;
 
 void setup() {
-  pac[pacMarqueeUL].microInput = 1;
-  pac[pacMarqueeUR].microInput = 2;
-  pac[pacMarqueeLL].microInput = 3;
-  pac[pacMarqueeLR].microInput = 4;
-  pac[pacSubs].microInput = 5;
-  pac[pacPad1L].microInput = 6;
-  pac[pacPad1R].microInput = 7;
-  pac[pacPad1U].microInput = 8;
-  pac[pacPad1D].microInput = 9;
-  pac[pacControl1].microInput = 10;
-  pac[pacPad2L].microInput = 11;
-  pac[pacPad2R].microInput = 12;
-  pac[pacPad2U].microInput = 14;
-  pac[pacPad2D].microInput = 15;
-  pac[pacControl2].microInput = 16;
+  pac[pacPad1L].microInput = 1;
+  pac[pacPad1R].microInput = 2;
+  pac[pacPad1U].microInput = 3;
+  pac[pacPad1D].microInput = 4;
+  pac[pacPad2L].microInput = 5;
+  pac[pacPad2R].microInput = 6;
+  pac[pacPad2U].microInput = 7;
+  pac[pacPad2D].microInput = 8;
+  pac[pacMarqueeUL].microInput = 9;
+  pac[pacMarqueeUR].microInput = 10;
+  pac[pacMarqueeLL].microInput = 11;
+  pac[pacMarqueeLR].microInput = 12;
+  pac[pacControl1].microInput = 14;
+  pac[pacControl2].microInput = 15;
+  pac[pacSubs].microInput = 16;
 
   button[buttonControl1L].microInput = 17;
   button[buttonControl1L].usbButton = 1;
@@ -188,7 +188,7 @@ void loop() {
       Serial.print(pac[14].onOff);
       Serial.print(" ");
       Serial.println(pac[15].onOff);
-      
+
       //   Serial.print("INFO: ");
       //   Serial.print(counter);
       //   Serial.print(" is ");
