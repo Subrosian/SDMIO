@@ -33,12 +33,6 @@ const int buttonInputNum = 17;
 
 enum buttonInput {
   buttonNull,
-  buttonControl1L,
-  buttonControl1S,
-  buttonControl1R,
-  buttonControl2L,
-  buttonControl2S,
-  buttonControl2R,
   buttonPad1L,
   buttonPad1R,
   buttonPad1U,
@@ -47,6 +41,12 @@ enum buttonInput {
   buttonPad2R,
   buttonPad2U,
   buttonPad2D,
+  buttonControl1L,
+  buttonControl1S,
+  buttonControl1R,
+  buttonControl2L,
+  buttonControl2S,
+  buttonControl2R,
   buttonBack,
   buttonConfig,
 };
@@ -78,52 +78,52 @@ void setup() {
   pac[pacControl2].microInput = 15;
   pac[pacSubs].microInput = 16;
 
-  button[buttonControl1L].microInput = 17;
-  button[buttonControl1L].usbButton = 1;
+  button[buttonPad1L].microInput = 17;
+  button[buttonPad1L].usbButton = 1;
 
-  button[buttonControl1S].microInput = 18;
-  button[buttonControl1S].usbButton = 2;
+  button[buttonPad1R].microInput = 18;
+  button[buttonPad1R].usbButton = 2;
 
-  button[buttonControl1R].microInput = 19;
-  button[buttonControl1R].usbButton = 3;
+  button[buttonPad1U].microInput = 19;
+  button[buttonPad1U].usbButton = 3;
 
-  button[buttonControl2L].microInput = 20;
-  button[buttonControl2L].usbButton = 4;
+  button[buttonPad1D].microInput = 20;
+  button[buttonPad1D].usbButton = 4;
 
-  button[buttonControl2S].microInput = 21;
-  button[buttonControl2S].usbButton = 5;
+  button[buttonPad2L].microInput = 21;
+  button[buttonPad2L].usbButton = 5;
 
-  button[buttonControl2R].microInput = 22;
-  button[buttonControl2R].usbButton = 6;
+  button[buttonPad2R].microInput = 22;
+  button[buttonPad2R].usbButton = 6;
 
-  button[buttonPad1L].microInput = 23;
-  button[buttonPad1L].usbButton = 7;
+  button[buttonPad2U].microInput = 23;
+  button[buttonPad2U].usbButton = 7;
 
-  button[buttonPad1R].microInput = 24;
-  button[buttonPad1R].usbButton = 8;
+  button[buttonPad2D].microInput = 24;
+  button[buttonPad2D].usbButton = 8;
 
-  button[buttonPad1U].microInput = 25;
-  button[buttonPad1U].usbButton = 9;
+  button[buttonControl1L].microInput = 25;
+  button[buttonControl1L].usbButton = 9;
 
-  button[buttonPad1D].microInput = 26;
-  button[buttonPad1D].usbButton = 10;
+  button[buttonControl1S].microInput = 26;
+  button[buttonControl1S].usbButton = 10;
 
-  button[buttonPad2L].microInput = 27;
-  button[buttonPad2L].usbButton = 11;
+  button[buttonControl1R].microInput = 27;
+  button[buttonControl1R].usbButton = 11;
 
-  button[buttonPad2R].microInput = 28;
-  button[buttonPad2R].usbButton = 12;
+  button[buttonControl2L].microInput = 28;
+  button[buttonControl2L].usbButton = 12;
 
-  button[buttonPad2U].microInput = 29;
-  button[buttonPad2U].usbButton = 13;
+  button[buttonControl2S].microInput = 29;
+  button[buttonControl2S].usbButton = 13;
 
-  button[buttonPad2D].microInput = 30;
-  button[buttonPad2D].usbButton = 14;
+  button[buttonControl2R].microInput = 30;
+  button[buttonControl2R].usbButton = 14;
 
-  button[buttonBack].microInput = 31;
+  button[buttonBack].microInput = 33;
   button[buttonBack].usbButton = 15;
 
-  button[buttonConfig].microInput = 32;
+  button[buttonConfig].microInput = 34;
   button[buttonConfig].usbButton = 16;
 
   Serial.begin(9600);
