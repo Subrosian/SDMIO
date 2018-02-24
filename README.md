@@ -19,6 +19,9 @@ Next steps:
 
 DDR Machine pictures/video (V1 design):
 
-Pictures: https://imgur.com/a/bB0s9
+Pictures: 
+Album: https://imgur.com/a/bB0s9
 
-Video: https://www.youtube.com/watch?v=dn3CJcW0r64
+Videos: 
+Running the old V1 design: https://www.youtube.com/watch?v=dn3CJcW0r64
+First Lighting Output on V2 design: https://www.youtube.com/watch?v=AclRpqruMmo
