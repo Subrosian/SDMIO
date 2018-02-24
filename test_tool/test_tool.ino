@@ -64,7 +64,39 @@ typedef struct {
 
 buttonRef button[buttonInputNum];
 
+const int lightOutputNum = 16;
+
+enum lightOutput {
+  lightNull,
+  lightPad1L,
+  lightPad1R,
+  lightPad1U,
+  lightPad1D,
+  lightPad2L,
+  lightPad2R,
+  lightPad2U,
+  lightPad2D,
+  lightMarqueeUL,
+  lightMarqueeUR,
+  lightMarqueeLL,
+  lightMarqueeLR,
+  lightControl1,
+  lightControl2,
+  lightSubs,
+};
+
+typedef struct {
+  byte firstLed;
+  byte numLeds;
+  byte oldState;
+  byte onOff;
+} lightRef;
+
+lightRef light[lightOutputNum];
+
 const int ledPin = 13;
+
+int randomNumber;
 
 void setup() {
   FastLED.addLeds<WS2811, DATA_PIN, RGB>(leds, NUM_LEDS);
@@ -87,51 +119,70 @@ void setup() {
 
   button[buttonPad1L].microInput = 17;
   button[buttonPad1L].usbButton = 1;
-
   button[buttonPad1R].microInput = 18;
   button[buttonPad1R].usbButton = 2;
-
   button[buttonPad1U].microInput = 19;
   button[buttonPad1U].usbButton = 3;
-
   button[buttonPad1D].microInput = 20;
   button[buttonPad1D].usbButton = 4;
-
   button[buttonPad2L].microInput = 21;
   button[buttonPad2L].usbButton = 5;
-
   button[buttonPad2R].microInput = 22;
   button[buttonPad2R].usbButton = 6;
-
   button[buttonPad2U].microInput = 23;
   button[buttonPad2U].usbButton = 7;
-
   button[buttonPad2D].microInput = 24;
   button[buttonPad2D].usbButton = 8;
-
   button[buttonControl1L].microInput = 25;
   button[buttonControl1L].usbButton = 9;
-
   button[buttonControl1S].microInput = 26;
   button[buttonControl1S].usbButton = 10;
-
   button[buttonControl1R].microInput = 27;
   button[buttonControl1R].usbButton = 11;
-
   button[buttonControl2L].microInput = 28;
   button[buttonControl2L].usbButton = 12;
-
   button[buttonControl2S].microInput = 29;
   button[buttonControl2S].usbButton = 13;
-
   button[buttonControl2R].microInput = 30;
   button[buttonControl2R].usbButton = 14;
-
   button[buttonBack].microInput = 33;
   button[buttonBack].usbButton = 15;
-
   button[buttonConfig].microInput = 34;
   button[buttonConfig].usbButton = 16;
+
+  light[lightPad1L].firstLed = 0;
+  light[lightPad1L].numLeds = 8;
+  light[lightPad1R].firstLed = 8;
+  light[lightPad1R].numLeds = 8;
+  light[lightPad1U].firstLed = 16;
+  light[lightPad1U].numLeds = 8;
+  light[lightPad1D].firstLed = 24;
+  light[lightPad1D].numLeds = 8;
+
+  light[lightPad2L].firstLed = 32;
+  light[lightPad2L].numLeds = 8;
+  light[lightPad2R].firstLed = 40;
+  light[lightPad2R].numLeds = 8;
+  light[lightPad2U].firstLed = 48;
+  light[lightPad2U].numLeds = 8;
+  light[lightPad2D].firstLed = 56;
+  light[lightPad2D].numLeds = 8;
+
+  light[lightMarqueeUL].firstLed = 64;
+  light[lightMarqueeUL].numLeds = 8;
+  light[lightMarqueeUR].firstLed = 72;
+  light[lightMarqueeUR].numLeds = 8;
+  light[lightMarqueeLL].firstLed = 80;
+  light[lightMarqueeLL].numLeds = 8;
+  light[lightMarqueeLR].firstLed = 88;
+  light[lightMarqueeLR].numLeds = 8;
+
+  light[pacControl1].firstLed = 96;
+  light[pacControl1].numLeds = 3;
+  light[pacControl2].firstLed = 99;
+  light[pacControl2].numLeds = 3;
+  light[pacSubs].firstLed = 102;
+  light[pacSubs].numLeds = 16;
 
   Serial.begin(9600);
   Serial.println("INFO: Microcontroller Initialized");
@@ -161,42 +212,63 @@ void loop() {
 
       if (temp == 0) {
         pac[counter].onOff = 1;
-        leds[counter] = CRGB::White;
+
+        //WORKING POINT
+      randomNumber = random(1, 4);
+        for (int ledCounter = light[counter].firstLed; ledCounter < light[counter].firstLed + light[counter].numLeds; ledCounter++) {
+       
+          if (randomNumber == 1) {
+            leds[ledCounter] = CRGB::Red;
+          }
+          if (randomNumber == 2) {
+            leds[ledCounter] = CRGB::Blue;
+          }
+          if (randomNumber == 3) {
+            leds[ledCounter] = CRGB::Green;
+          }
+          if (randomNumber == 4) {
+            leds[ledCounter] = CRGB::White;
+          }
+        }
+
       }
       if (temp == 1) {
         pac[counter].onOff = 0;
-        leds[counter] = CRGB::Black;
+        for (int ledCounter = light[counter].firstLed; ledCounter < light[counter].firstLed + light[counter].numLeds; ledCounter++) {
+          leds[ledCounter] = CRGB::Black;
+        }
       }
-      Serial.print("INFO: ");
-      Serial.print(pac[1].onOff);
-      Serial.print(" ");
-      Serial.print(pac[2].onOff);
-      Serial.print(" ");
-      Serial.print(pac[3].onOff);
-      Serial.print(" ");
-      Serial.print(pac[4].onOff);
-      Serial.print(" | ");
-      Serial.print(pac[5].onOff);
-      Serial.print(" ");
-      Serial.print(pac[6].onOff);
-      Serial.print(" ");
-      Serial.print(pac[7].onOff);
-      Serial.print(" ");
-      Serial.print(pac[8].onOff);
-      Serial.print(" | ");
-      Serial.print(pac[9].onOff);
-      Serial.print(" ");
-      Serial.print(pac[10].onOff);
-      Serial.print(" ");
-      Serial.print(pac[11].onOff);
-      Serial.print(" ");
-      Serial.print(pac[12].onOff);
-      Serial.print(" | ");
-      Serial.print(pac[13].onOff);
-      Serial.print(" ");
-      Serial.print(pac[14].onOff);
-      Serial.print(" ");
-      Serial.println(pac[15].onOff);
+
+      //Serial.print("INFO: ");
+      //Serial.print(pac[1].onOff);
+      //Serial.print(" ");
+      //Serial.print(pac[2].onOff);
+      //Serial.print(" ");
+      //Serial.print(pac[3].onOff);
+      //Serial.print(" ");
+      //Serial.print(pac[4].onOff);
+      //Serial.print(" | ");
+      //Serial.print(pac[5].onOff);
+      //Serial.print(" ");
+      //Serial.print(pac[6].onOff);
+      //Serial.print(" ");
+      //Serial.print(pac[7].onOff);
+      //Serial.print(" ");
+      //Serial.print(pac[8].onOff);
+      //Serial.print(" | ");
+      //Serial.print(pac[9].onOff);
+      //Serial.print(" ");
+      //Serial.print(pac[10].onOff);
+      //Serial.print(" ");
+      //Serial.print(pac[11].onOff);
+      //Serial.print(" ");
+      //Serial.print(pac[12].onOff);
+      //Serial.print(" | ");
+      //Serial.print(pac[13].onOff);
+      //Serial.print(" ");
+      //Serial.print(pac[14].onOff);
+      //Serial.print(" ");
+      //Serial.println(pac[15].onOff);
       FastLED.show();
     }
   }
