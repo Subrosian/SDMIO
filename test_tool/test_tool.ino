@@ -1,5 +1,10 @@
 // Christopher McKinzie (subrosian@gmail.com)
 
+#include "FastLED.h"
+#define NUM_LEDS 300
+#define DATA_PIN 32
+CRGB leds[NUM_LEDS];
+
 const int pacInputNum = 16;
 
 enum pacInput {
@@ -62,6 +67,8 @@ buttonRef button[buttonInputNum];
 const int ledPin = 13;
 
 void setup() {
+  FastLED.addLeds<WS2811, DATA_PIN, RGB>(leds, NUM_LEDS);
+
   pac[pacPad1L].microInput = 1;
   pac[pacPad1R].microInput = 2;
   pac[pacPad1U].microInput = 3;
@@ -154,9 +161,11 @@ void loop() {
 
       if (temp == 0) {
         pac[counter].onOff = 1;
+        leds[counter] = CRGB::White;
       }
       if (temp == 1) {
         pac[counter].onOff = 0;
+        leds[counter] = CRGB::Black;
       }
       Serial.print("INFO: ");
       Serial.print(pac[1].onOff);
@@ -188,12 +197,7 @@ void loop() {
       Serial.print(pac[14].onOff);
       Serial.print(" ");
       Serial.println(pac[15].onOff);
-
-      //   Serial.print("INFO: ");
-      //   Serial.print(counter);
-      //   Serial.print(" is ");
-      //   Serial.println(temp);
-
+      FastLED.show();
     }
   }
 
