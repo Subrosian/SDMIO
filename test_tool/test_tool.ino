@@ -197,7 +197,10 @@ void loop() {
       Serial.print(pac[14].onOff);
       Serial.print(" ");
       Serial.println(pac[15].onOff);
+<<<<<<< HEAD
       FastLED.show();
+=======
+>>>>>>> 17c0f1708720388716c9d064d4a0760e09688ff3
     }
   }
 
@@ -215,7 +218,7 @@ void loop() {
       Serial.print(" is ");
       Serial.println(temp);
       //send button state to joystick using oposite new oldstate since !(HIGH=1)=0 and !(LOW=0)=1
-      //Joystick.button(button[counter].usbButton, !button[counter].oldState);
+      Joystick.button(button[counter].usbButton, !button[counter].oldState);
     }
   }
 }
