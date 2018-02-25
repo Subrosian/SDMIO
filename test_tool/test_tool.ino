@@ -206,39 +206,21 @@ void loop() {
     //if oldstate does NOT !equal new readstate do something
     int temp = digitalRead(pac[counter].microInput);
     if (pac[counter].oldState != temp) {
-
       //save new old value
       pac[counter].oldState = temp;
-
       if (temp == 0) {
         pac[counter].onOff = 1;
-
-        //WORKING POINT
-      randomNumber = random(1, 4);
+        randomNumber = random8();
         for (int ledCounter = light[counter].firstLed; ledCounter < light[counter].firstLed + light[counter].numLeds; ledCounter++) {
-       
-          if (randomNumber == 1) {
-            leds[ledCounter] = CRGB::Red;
-          }
-          if (randomNumber == 2) {
-            leds[ledCounter] = CRGB::Blue;
-          }
-          if (randomNumber == 3) {
-            leds[ledCounter] = CRGB::Green;
-          }
-          if (randomNumber == 4) {
-            leds[ledCounter] = CRGB::White;
-          }
+          leds[ledCounter] = CHSV(randomNumber,255,64);
         }
-
       }
       if (temp == 1) {
         pac[counter].onOff = 0;
-        for (int ledCounter = light[counter].firstLed; ledCounter < light[counter].firstLed + light[counter].numLeds; ledCounter++) {
-          leds[ledCounter] = CRGB::Black;
-        }
+       for (int ledCounter = light[counter].firstLed; ledCounter < light[counter].firstLed + light[counter].numLeds; ledCounter++) {
+         leds[ledCounter] = CRGB::Black;
+       }
       }
-
       //Serial.print("INFO: ");
       //Serial.print(pac[1].onOff);
       //Serial.print(" ");
@@ -272,16 +254,13 @@ void loop() {
       FastLED.show();
     }
   }
-
   //check all the buttons
   for (int counter = 0; counter < buttonInputNum; counter++) {
     //if oldstate does NOT !equal new readstate do something
     int temp = digitalRead(button[counter].microInput);
     if (button[counter].oldState != temp) {
-
       //save new old value
       button[counter].oldState = temp;
-
       Serial.print("INFO: ");
       Serial.print(counter);
       Serial.print(" is ");
