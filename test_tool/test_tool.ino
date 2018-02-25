@@ -1,7 +1,7 @@
 // Christopher McKinzie (subrosian@gmail.com)
 
 #include "FastLED.h"
-#define NUM_LEDS 300
+#define NUM_LEDS 400
 #define DATA_PIN 32
 CRGB leds[NUM_LEDS];
 
@@ -182,7 +182,7 @@ void setup() {
   light[pacControl2].firstLed = 99;
   light[pacControl2].numLeds = 3;
   light[pacSubs].firstLed = 102;
-  light[pacSubs].numLeds = 16;
+  light[pacSubs].numLeds = 198;
 
   Serial.begin(9600);
   Serial.println("INFO: Microcontroller Initialized");
@@ -212,14 +212,14 @@ void loop() {
         pac[counter].onOff = 1;
         randomNumber = random8();
         for (int ledCounter = light[counter].firstLed; ledCounter < light[counter].firstLed + light[counter].numLeds; ledCounter++) {
-          leds[ledCounter] = CHSV(randomNumber,255,64);
+          leds[ledCounter] = CHSV(randomNumber, 255, 255);
         }
       }
       if (temp == 1) {
         pac[counter].onOff = 0;
-       for (int ledCounter = light[counter].firstLed; ledCounter < light[counter].firstLed + light[counter].numLeds; ledCounter++) {
-         leds[ledCounter] = CRGB::Black;
-       }
+        for (int ledCounter = light[counter].firstLed; ledCounter < light[counter].firstLed + light[counter].numLeds; ledCounter++) {
+          leds[ledCounter] = CRGB::Black;
+        }
       }
       //Serial.print("INFO: ");
       //Serial.print(pac[1].onOff);
@@ -251,9 +251,10 @@ void loop() {
       //Serial.print(pac[14].onOff);
       //Serial.print(" ");
       //Serial.println(pac[15].onOff);
-      FastLED.show();
+
     }
   }
+  FastLED.show();
   //check all the buttons
   for (int counter = 0; counter < buttonInputNum; counter++) {
     //if oldstate does NOT !equal new readstate do something
