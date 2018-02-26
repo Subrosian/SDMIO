@@ -200,12 +200,35 @@ void setup() {
   }
 }
 
+int reDraw=0;
+
+void fadeLeds(){
+  int x=0;
+  for(int x=0;x<NUM_LEDS;x++){
+    if(leds[x].red > 0){
+      leds[x].red = int(leds[x].red *0.90);
+    }
+    if(leds[x].green > 0){
+      leds[x].green = int(leds[x].green *0.90);
+    }
+    if(leds[x].blue > 0){
+      leds[x].blue = int(leds[x].blue *0.90);
+    }
+  }
+}
+
 void loop() {
+  //reset redraw value and check for changes
+  reDraw=0;
+  
   //check all the pacinputs
   for (int counter = 0; counter < pacInputNum; counter++) {
     //if oldstate does NOT !equal new readstate do something
     int temp = digitalRead(pac[counter].microInput);
     if (pac[counter].oldState != temp) {
+      //change in input update leds
+      reDraw=1;
+      
       //save new old value
       pac[counter].oldState = temp;
       if (temp == 0) {
@@ -254,7 +277,15 @@ void loop() {
 
     }
   }
-  FastLED.show();
+  
+  //needs a redraw
+  fadeLeds();
+  
+  if(reDraw==1 or 1){
+    FastLED.show();
+    reDraw=0;
+  }
+  
   //check all the buttons
   for (int counter = 0; counter < buttonInputNum; counter++) {
     //if oldstate does NOT !equal new readstate do something
