@@ -1,9 +1,13 @@
 // Christopher McKinzie (subrosian@gmail.com)
 
-#include "FastLED.h"
-#define NUM_LEDS 400
+//#include "FastLED.h"
+#include <Adafruit_NeoPixel.h>
+
+#define NUM_LEDS 492
 #define DATA_PIN 32
-CRGB leds[NUM_LEDS];
+//CRGB leds[NUM_LEDS];
+Adafruit_NeoPixel leds = Adafruit_NeoPixel(NUM_LEDS, DATA_PIN, NEO_GRB + NEO_KHZ800);
+
 
 const int pacInputNum = 16;
 
@@ -86,8 +90,8 @@ enum lightOutput {
 };
 
 typedef struct {
-  byte firstLed;
-  byte numLeds;
+  int16_t firstLed;
+  int16_t numLeds;
   byte oldState;
   byte onOff;
 } lightRef;
@@ -99,7 +103,7 @@ const int ledPin = 13;
 int randomNumber;
 
 void setup() {
-  FastLED.addLeds<WS2811, DATA_PIN, RGB>(leds, NUM_LEDS);
+  //FastLED.addLeds<WS2811, DATA_PIN, RGB>(leds, NUM_LEDS);
 
   pac[pacPad1L].microInput = 1;
   pac[pacPad1R].microInput = 2;
@@ -150,39 +154,39 @@ void setup() {
   button[buttonConfig].microInput = 34;
   button[buttonConfig].usbButton = 16;
 
-  light[lightPad1L].firstLed = 0;
-  light[lightPad1L].numLeds = 8;
-  light[lightPad1R].firstLed = 8;
-  light[lightPad1R].numLeds = 8;
-  light[lightPad1U].firstLed = 16;
-  light[lightPad1U].numLeds = 8;
-  light[lightPad1D].firstLed = 24;
-  light[lightPad1D].numLeds = 8;
+  light[lightPad1L].firstLed = 348;
+  light[lightPad1L].numLeds = 24;
+  light[lightPad1R].firstLed = 372;
+  light[lightPad1R].numLeds = 24;
+  light[lightPad1U].firstLed = 300;
+  light[lightPad1U].numLeds = 24;
+  light[lightPad1D].firstLed = 324;
+  light[lightPad1D].numLeds = 24;
 
-  light[lightPad2L].firstLed = 32;
-  light[lightPad2L].numLeds = 8;
-  light[lightPad2R].firstLed = 40;
-  light[lightPad2R].numLeds = 8;
-  light[lightPad2U].firstLed = 48;
-  light[lightPad2U].numLeds = 8;
-  light[lightPad2D].firstLed = 56;
-  light[lightPad2D].numLeds = 8;
+  light[lightPad2L].firstLed = 444;
+  light[lightPad2L].numLeds = 24;
+  light[lightPad2R].firstLed = 468;
+  light[lightPad2R].numLeds = 24;
+  light[lightPad2U].firstLed = 396;
+  light[lightPad2U].numLeds = 24;
+  light[lightPad2D].firstLed = 420;
+  light[lightPad2D].numLeds = 24;
 
-  light[lightMarqueeUL].firstLed = 64;
-  light[lightMarqueeUL].numLeds = 8;
-  light[lightMarqueeUR].firstLed = 72;
-  light[lightMarqueeUR].numLeds = 8;
-  light[lightMarqueeLL].firstLed = 80;
-  light[lightMarqueeLL].numLeds = 8;
-  light[lightMarqueeLR].firstLed = 88;
-  light[lightMarqueeLR].numLeds = 8;
+  light[lightMarqueeUL].firstLed = 0;
+  light[lightMarqueeUL].numLeds = 12;
+  light[lightMarqueeUR].firstLed = 12;
+  light[lightMarqueeUR].numLeds = 12;
+  light[lightMarqueeLL].firstLed = 24;
+  light[lightMarqueeLL].numLeds = 12;
+  light[lightMarqueeLR].firstLed = 36;
+  light[lightMarqueeLR].numLeds = 12;
 
-  light[pacControl1].firstLed = 96;
+  light[pacControl1].firstLed = 48;
   light[pacControl1].numLeds = 3;
-  light[pacControl2].firstLed = 99;
+  light[pacControl2].firstLed = 51;
   light[pacControl2].numLeds = 3;
-  light[pacSubs].firstLed = 102;
-  light[pacSubs].numLeds = 198;
+  light[pacSubs].firstLed = 54;
+  light[pacSubs].numLeds = 100;
 
   Serial.begin(9600);
   Serial.println("INFO: Microcontroller Initialized");
@@ -198,23 +202,92 @@ void setup() {
   for (int counter = 0; counter < buttonInputNum; counter++) {
     pinMode(button[counter].microInput, INPUT_PULLUP);
   }
+
+  leds.begin();
 }
 
 int reDraw=0;
 
 void fadeLeds(){
   int x=0;
+  uint8_t r,g,b;
+  
   for(int x=0;x<NUM_LEDS;x++){
-    if(leds[x].red > 0){
-      leds[x].red = int(leds[x].red *0.90);
+
+    r=(leds.getPixelColor(x) >> 16);
+    g=(leds.getPixelColor(x) >> 8);
+    b=(leds.getPixelColor(x));
+    
+    if(r > 0){
+      r = int(r *0.90);
     }
-    if(leds[x].green > 0){
-      leds[x].green = int(leds[x].green *0.90);
+    if(g> 0){
+      g = int(g *0.90);
     }
-    if(leds[x].blue > 0){
-      leds[x].blue = int(leds[x].blue *0.90);
+    if(b > 0){
+      b = int(b *0.90);
     }
+
+    leds.setPixelColor(x,r,g,b);
+    
   }
+}
+
+void HSV_to_RGB(float h, float s, float v, byte *r, byte *g, byte *b)
+{
+  int i;
+  float f,p,q,t;
+  
+  h = max(0.0, min(360.0, h));
+  s = max(0.0, min(100.0, s));
+  v = max(0.0, min(100.0, v));
+  
+  s /= 100;
+  v /= 100;
+  
+  if(s == 0) {
+    // Achromatic (grey)
+    *r = *g = *b = round(v*255);
+    return;
+  }
+
+  h /= 60; // sector 0 to 5
+  i = floor(h);
+  f = h - i; // factorial part of h
+  p = v * (1 - s);
+  q = v * (1 - s * f);
+  t = v * (1 - s * (1 - f));
+  switch(i) {
+    case 0:
+      *r = round(255*v);
+      *g = round(255*t);
+      *b = round(255*p);
+      break;
+    case 1:
+      *r = round(255*q);
+      *g = round(255*v);
+      *b = round(255*p);
+      break;
+    case 2:
+      *r = round(255*p);
+      *g = round(255*v);
+      *b = round(255*t);
+      break;
+    case 3:
+      *r = round(255*p);
+      *g = round(255*q);
+      *b = round(255*v);
+      break;
+    case 4:
+      *r = round(255*t);
+      *g = round(255*p);
+      *b = round(255*v);
+      break;
+    default: // case 5:
+      *r = round(255*v);
+      *g = round(255*p);
+      *b = round(255*q);
+    }
 }
 
 void loop() {
@@ -233,15 +306,20 @@ void loop() {
       pac[counter].oldState = temp;
       if (temp == 0) {
         pac[counter].onOff = 1;
-        randomNumber = random8();
-        for (int ledCounter = light[counter].firstLed; ledCounter < light[counter].firstLed + light[counter].numLeds; ledCounter++) {
-          leds[ledCounter] = CHSV(randomNumber, 255, 255);
+        //randomNumber = random8();
+        uint8_t r,g,b;
+        HSV_to_RGB((random(360)/360.0)*360.0,100.0f,50.0f,&r,&g,&b);
+        
+        for (int16_t ledCounter = light[counter].firstLed; ledCounter < light[counter].firstLed + light[counter].numLeds; ledCounter++) {
+          //leds[ledCounter] = CHSV(randomNumber, 255, 255);
+          leds.setPixelColor(ledCounter,r,g,b);
         }
       }
       if (temp == 1) {
         pac[counter].onOff = 0;
-        for (int ledCounter = light[counter].firstLed; ledCounter < light[counter].firstLed + light[counter].numLeds; ledCounter++) {
-          leds[ledCounter] = CRGB::Black;
+        for (int16_t ledCounter = light[counter].firstLed; ledCounter < light[counter].firstLed + light[counter].numLeds; ledCounter++) {
+          //leds[ledCounter] = CRGB::Black;
+          leds.setPixelColor(ledCounter,0, 0, 0);
         }
       }
       //Serial.print("INFO: ");
@@ -282,7 +360,8 @@ void loop() {
   fadeLeds();
   
   if(reDraw==1 or 1){
-    FastLED.show();
+    //FastLED.show();
+    leds.show();
     reDraw=0;
   }
   
