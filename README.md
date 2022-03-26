@@ -1,11 +1,11 @@
-# stepmania-teensy-v2
-Documentation and Arduino code for my Stepmania Teensy project V2.
+# Subrosian's Dance Machine IO board
+Documentation and source files for a custom IO board for 4 panel dance machines.
 
-This project involves using a Teensy 3.5 and a Pacdrive to handle button inputs and lighting outputs, with all lighting outputs being RGB and being able to have animations instead of static info coming out of Stepmania. I am currently converting my system from using the SextetStream driver to using the Pacdrive driver. My goal is to have all of the lighting code being provided to the Teensy through the Pacdrive, and then all of the custom animations will be handled by the Teensy. All lighting in the cab/pads will be using individually controllable RGB LEDs.
+This project involves using a Teensy 3.5 and a Pacdrive to handle button inputs and lighting outputs, with all lighting outputs being RGB and being able to have animations instead of static info coming out of Stepmania. 
 
 ## Current status
 
-The RGB led light rings have come in. I've started cutting out all of my V1 work to get ready for the V2 install. Updates to happen more frequently now.
+I've been super lazy for the last few years and just picked this back up. Updates to be more frequent until the project is completed now.
 
 ## Pictures
 
