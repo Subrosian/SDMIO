@@ -11,7 +11,8 @@ We are currently working on the new physical board as my machine is currently ru
 * 1x Pacdrive (Screw terminals will need to be removed and pins added)
 * 8x 24 LED WS2812 Light Rings (For Pad Lights)
 * 4x 12 LED WS2812 Light Rings (For Spotlights)
-* 6x Individual LED WS2812s (For buttons) - The current ones I bought don't work well so I'm still trying to source these
+* 6x Individual LED WS2812s (For buttons) - TODO: Find replacements as previously purchased ones don't work well.
+* 2x LED WS2812 light strips (For Subs) - TODO: Find length and density I used
 
 ## Hardware Installation
 
