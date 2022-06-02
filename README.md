@@ -3,7 +3,7 @@ Documentation and source files for a custom IO board for 4 panel dance machines.
 
 ## Current status
 
-We are currently working on the new physical board as my machine is currently running with a breadboard for testing. This is very much still a work-in-progress. I will continue to update documenation as I get to it.
+PCB and parts ordered placed. Waiting for them to be delivered.
 
 ## Hardware
 
