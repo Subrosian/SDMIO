@@ -1,8 +1,9 @@
-// Christopher McKinzie (subrosian@gmail.com)
+//SDMIO 1.0
+//Christopher McKinzie (subrosian@gmail.com)
 #include <Adafruit_NeoPixel.h>
 
 #define NUM_LEDS 492
-#define DATA_PIN 32
+#define DATA_PIN 39
 //CRGB leds[NUM_LEDS];
 Adafruit_NeoPixel leds = Adafruit_NeoPixel(NUM_LEDS, DATA_PIN, NEO_GRB + NEO_KHZ800);
 
@@ -105,53 +106,53 @@ int randomNumber;
 void setup() {
   //FastLED.addLeds<WS2811, DATA_PIN, RGB>(leds, NUM_LEDS);
 
-  pac[pacPad1L].microInput = 1;
-  pac[pacPad1R].microInput = 2;
-  pac[pacPad1U].microInput = 3;
-  pac[pacPad1D].microInput = 4;
-  pac[pacPad2L].microInput = 5;
-  pac[pacPad2R].microInput = 6;
-  pac[pacPad2U].microInput = 7;
+  pac[pacPad1L].microInput = 26;
+  pac[pacPad1R].microInput = 25;
+  pac[pacPad1U].microInput = 24;
+  pac[pacPad1D].microInput = 12;
+  pac[pacPad2L].microInput = 11;
+  pac[pacPad2R].microInput = 10;
+  pac[pacPad2U].microInput = 9;
   pac[pacPad2D].microInput = 8;
-  pac[pacMarqueeUL].microInput = 9;
-  pac[pacMarqueeUR].microInput = 10;
-  pac[pacMarqueeLL].microInput = 11;
-  pac[pacMarqueeLR].microInput = 12;
-  pac[pacControl1].microInput = 14;
-  pac[pacControl2].microInput = 15;
-  pac[pacSubs].microInput = 16;
+  pac[pacMarqueeUL].microInput = 7;
+  pac[pacMarqueeUR].microInput = 6;
+  pac[pacMarqueeLL].microInput = 5;
+  pac[pacMarqueeLR].microInput = 4;
+  pac[pacControl1].microInput = 3;
+  pac[pacControl2].microInput = 2;
+  pac[pacSubs].microInput = 1;
 
-  button[buttonPad1L].microInput = 17;
+  button[buttonPad1L].microInput = 28;
   button[buttonPad1L].usbButton = 1;
-  button[buttonPad1R].microInput = 18;
+  button[buttonPad1R].microInput = 21;
   button[buttonPad1R].usbButton = 2;
-  button[buttonPad1U].microInput = 19;
+  button[buttonPad1U].microInput = 27;
   button[buttonPad1U].usbButton = 3;
-  button[buttonPad1D].microInput = 20;
+  button[buttonPad1D].microInput = 22;
   button[buttonPad1D].usbButton = 4;
-  button[buttonPad2L].microInput = 21;
+  button[buttonPad2L].microInput = 16;
   button[buttonPad2L].usbButton = 5;
-  button[buttonPad2R].microInput = 22;
+  button[buttonPad2R].microInput = 15;
   button[buttonPad2R].usbButton = 6;
-  button[buttonPad2U].microInput = 23;
+  button[buttonPad2U].microInput = 32;
   button[buttonPad2U].usbButton = 7;
-  button[buttonPad2D].microInput = 24;
+  button[buttonPad2D].microInput = 17;
   button[buttonPad2D].usbButton = 8;
-  button[buttonControl1L].microInput = 25;
+  button[buttonControl1L].microInput = 30;
   button[buttonControl1L].usbButton = 9;
-  button[buttonControl1S].microInput = 26;
+  button[buttonControl1S].microInput = 31;
   button[buttonControl1S].usbButton = 10;
-  button[buttonControl1R].microInput = 27;
+  button[buttonControl1R].microInput = 19;
   button[buttonControl1R].usbButton = 11;
-  button[buttonControl2L].microInput = 28;
+  button[buttonControl2L].microInput = 36;
   button[buttonControl2L].usbButton = 12;
-  button[buttonControl2S].microInput = 29;
+  button[buttonControl2S].microInput = 34;
   button[buttonControl2S].usbButton = 13;
-  button[buttonControl2R].microInput = 30;
+  button[buttonControl2R].microInput = 35;
   button[buttonControl2R].usbButton = 14;
-  button[buttonBack].microInput = 33;
+  button[buttonBack].microInput = 18;
   button[buttonBack].usbButton = 15;
-  button[buttonConfig].microInput = 34;
+  button[buttonConfig].microInput = 33;
   button[buttonConfig].usbButton = 16;
 
 
