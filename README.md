@@ -3,7 +3,7 @@ Documentation and source files for a custom IO board for 4 panel dance machines.
 
 ## Current status
 
-PCB and parts ordered placed. Waiting for them to be delivered.
+Board is delivered and populated. Next thing to do is test it in my machine.
 
 ## Hardware
 
