@@ -9,7 +9,6 @@ Adafruit_NeoPixel leds = Adafruit_NeoPixel(NUM_LEDS, DATA_PIN, NEO_GRB + NEO_KHZ
 
 unsigned long lastbutton = 0;
 int attractmode = 0;
-
 const int pacInputNum = 16;
 
 enum pacInput {
@@ -38,7 +37,6 @@ typedef struct {
 } pacRef;
 
 pacRef pac[pacInputNum];
-
 const int buttonInputNum = 17;
 
 enum buttonInput {
@@ -68,7 +66,6 @@ typedef struct {
 } buttonRef;
 
 buttonRef button[buttonInputNum];
-
 const int lightOutputNum = 16;
 
 enum lightOutput {
@@ -98,9 +95,7 @@ typedef struct {
 } lightRef;
 
 lightRef light[lightOutputNum];
-
 const int ledPin = 13;
-
 int randomNumber;
 
 void setup() {
@@ -155,8 +150,6 @@ void setup() {
   button[buttonConfig].microInput = 33;
   button[buttonConfig].usbButton = 16;
 
-
-
   light[lightMarqueeUL].firstLed = 0;
   light[lightMarqueeUL].numLeds = 12;
   light[lightMarqueeUR].firstLed = 12;
@@ -182,7 +175,6 @@ void setup() {
   light[lightPad1R].firstLed = 230;
   light[lightPad1R].numLeds = 24;
 
-
   light[lightPad2U].firstLed = 254;
   light[lightPad2U].numLeds = 24;
   light[lightPad2D].firstLed = 278;
@@ -191,7 +183,6 @@ void setup() {
   light[lightPad2L].numLeds = 24;
   light[lightPad2R].firstLed = 326;
   light[lightPad2R].numLeds = 24;
-
 
   Serial.begin(9600);
   Serial.println("INFO: Microcontroller Initialized");
@@ -202,12 +193,10 @@ void setup() {
   for (int counter = 0; counter < pacInputNum; counter++) {
     pinMode(pac[counter].microInput, INPUT_PULLUP);
   }
-
   //setup all the buttons as inputs
   for (int counter = 0; counter < buttonInputNum; counter++) {
     pinMode(button[counter].microInput, INPUT_PULLUP);
   }
-
   leds.begin();
 }
 
@@ -216,13 +205,10 @@ int reDraw=0;
 void fadeLeds(){
   int x=0;
   uint8_t r,g,b;
-  
   for(int x=0;x<NUM_LEDS;x++){
-
     r=(leds.getPixelColor(x) >> 16);
     g=(leds.getPixelColor(x) >> 8);
     b=(leds.getPixelColor(x));
-    
     if(r > 0){
       r = int(r *0.90);
     }
@@ -232,9 +218,7 @@ void fadeLeds(){
     if(b > 0){
       b = int(b *0.90);
     }
-
     leds.setPixelColor(x,r,g,b);
-    
   }
 }
 
@@ -242,20 +226,16 @@ void HSV_to_RGB(float h, float s, float v, byte *r, byte *g, byte *b)
 {
   int i;
   float f,p,q,t;
-  
   h = max(0.0, min(360.0, h));
   s = max(0.0, min(100.0, s));
   v = max(0.0, min(100.0, v));
-  
   s /= 100;
   v /= 100;
-  
   if(s == 0) {
     // Achromatic (grey)
     *r = *g = *b = round(v*255);
     return;
   }
-
   h /= 60; // sector 0 to 5
   i = floor(h);
   f = h - i; // factorial part of h
@@ -298,7 +278,6 @@ void HSV_to_RGB(float h, float s, float v, byte *r, byte *g, byte *b)
 void loop() {
   //reset redraw value and check for changes
   reDraw=0;
-  
   //check all the pacinputs
   for (int counter = 0; counter < pacInputNum; counter++) {
     //if oldstate does NOT !equal new readstate do something
@@ -306,7 +285,6 @@ void loop() {
     if (pac[counter].oldState != temp) {
       //change in input update leds
       reDraw=1;
-      
       //save new old value
       pac[counter].oldState = temp;
       if (temp == 0) {
@@ -314,7 +292,6 @@ void loop() {
         //randomNumber = random8();
         uint8_t r,g,b;
         HSV_to_RGB((random(360)/360.0)*360.0,100.0f,50.0f,&r,&g,&b);
-        
         for (int16_t ledCounter = light[counter].firstLed; ledCounter < light[counter].firstLed + light[counter].numLeds; ledCounter++) {
           //leds[ledCounter] = CHSV(randomNumber, 255, 255);
           leds.setPixelColor(ledCounter,r,g,b);
@@ -329,16 +306,13 @@ void loop() {
       }
     }
   }
-  
   //needs a redraw
   fadeLeds();
-  
   if(reDraw==1 or 1){
     //FastLED.show();
     leds.show();
     reDraw=0;
   }
-  
   //check all the buttons
   for (int counter = 1; counter < buttonInputNum; counter++) {
     //if oldstate does NOT !equal new readstate do something
@@ -346,7 +320,6 @@ void loop() {
       button[counter].oldState = digitalRead(button[counter].microInput);
       //send button state to joystick using oposite new oldstate since !(HIGH=1)=0 and !(LOW=0)=1
       Joystick.button(button[counter].usbButton, !button[counter].oldState);
-
     }
   }
 }
