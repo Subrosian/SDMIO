@@ -377,7 +377,7 @@ void loop() {
 
         if(!button[counter].oldState){ //if held
 
-          held_timer=millis();
+          held_timer=millis()+shutdown_hold_time;
           blackout_mode = !blackout_mode;
 
         }
@@ -392,7 +392,7 @@ void loop() {
 
   }
 
-  if(!button[buttonConfig].oldState && (held_timer+shutdown_hold_time)<millis()){ //if held for shutdown time
+  if(!button[buttonConfig].oldState && held_timer<millis()){ //if held for shutdown time
 
     Keyboard.press(KEY_SYSTEM_POWER_DOWN);
     Keyboard.release(KEY_SYSTEM_POWER_DOWN);
