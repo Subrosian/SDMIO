@@ -1,5 +1,11 @@
-//SDMIO 1.0
+//SDMIO 1.1
 //Christopher McKinzie (subrosian@gmail.com)
+//Board Teensy 3.5
+//USB Type Keyboard + Mouse + Joystick
+//CPU Speed 120Mhz
+//Optimise Faster
+//Keyboard Layout English
+
 #include <Adafruit_NeoPixel.h>
 
 #define NUM_LEDS 492
@@ -10,6 +16,10 @@ Adafruit_NeoPixel leds = Adafruit_NeoPixel(NUM_LEDS, DATA_PIN, NEO_GRB + NEO_KHZ
 unsigned long lastbutton = 0;
 int attractmode = 0;
 const int pacInputNum = 16;
+
+#define shutdown_hold_time 5000
+unsigned long held_timer;
+bool blackout_mode = false;
 
 enum pacInput {
   pacNull,
@@ -56,7 +66,7 @@ enum buttonInput {
   buttonControl2S,
   buttonControl2R,
   buttonBack,
-  buttonConfig,
+  buttonConfig
 };
 
 typedef struct {
@@ -90,6 +100,7 @@ enum lightOutput {
 typedef struct {
   int16_t firstLed;
   int16_t numLeds;
+  uint32_t fill_color;
   byte oldState;
   byte onOff;
 } lightRef;
@@ -203,7 +214,6 @@ void setup() {
 int reDraw=0;
 
 void fadeLeds(){
-  int x=0;
   uint8_t r,g,b;
   for(int x=0;x<NUM_LEDS;x++){
     r=(leds.getPixelColor(x) >> 16);
@@ -276,36 +286,81 @@ void HSV_to_RGB(float h, float s, float v, byte *r, byte *g, byte *b)
 }
 
 void loop() {
+
   //reset redraw value and check for changes
   reDraw=0;
+  static bool current_pin_state;
+  static uint8_t r,g,b;
+
   //check all the pacinputs
   for (int counter = 0; counter < pacInputNum; counter++) {
+
     //if oldstate does NOT !equal new readstate do something
-    int temp = digitalRead(pac[counter].microInput);
-    if (pac[counter].oldState != temp) {
+    current_pin_state = digitalRead(pac[counter].microInput);
+
+    //always set pin to untriggered if blackoutmode
+    if(blackout_mode){
+
+      switch(counter){
+        case pacSubs:
+        case pacMarqueeUL:
+        case pacMarqueeUR:
+        case pacMarqueeLL:
+        case pacMarqueeLR:
+          current_pin_state = 1;
+        break; 
+      }
+
+    }
+
+    if (pac[counter].oldState != current_pin_state) {
       //change in input update leds
       reDraw=1;
-      //save new old value
-      pac[counter].oldState = temp;
-      if (temp == 0) {
-        pac[counter].onOff = 1;
-        //randomNumber = random8();
-        uint8_t r,g,b;
+
+      pac[counter].oldState = current_pin_state;
+
+      if (current_pin_state) {
+
+        r=g=b=0;
+
+      }else{
+
         HSV_to_RGB((random(360)/360.0)*360.0,100.0f,50.0f,&r,&g,&b);
-        for (int16_t ledCounter = light[counter].firstLed; ledCounter < light[counter].firstLed + light[counter].numLeds; ledCounter++) {
-          //leds[ledCounter] = CHSV(randomNumber, 255, 255);
-          leds.setPixelColor(ledCounter,r,g,b);
-        }
+        
       }
-      if (temp == 1) {
-        pac[counter].onOff = 0;
-        for (int16_t ledCounter = light[counter].firstLed; ledCounter < light[counter].firstLed + light[counter].numLeds; ledCounter++) {
-          //leds[ledCounter] = CRGB::Black;
-          leds.setPixelColor(ledCounter,0, 0, 0);
-        }
+
+      light[counter].fill_color = leds.Color(r,g,b);
+      pac[counter].onOff = !current_pin_state;
+
+      for (int16_t ledCounter = light[counter].firstLed; ledCounter < light[counter].firstLed + light[counter].numLeds; ledCounter++) {
+        //leds[ledCounter] = CRGB::Black;
+        leds.setPixelColor(ledCounter, light[counter].fill_color);
       }
+
+    }else if(!current_pin_state){//if pac pad button pressed hold color
+
+      switch(counter){
+        case pacPad1L:
+        case pacPad1R:
+        case pacPad1U:
+        case pacPad1D:
+        case pacPad2L:
+        case pacPad2R:
+        case pacPad2U:
+        case pacPad2D:
+
+          for (int16_t ledCounter = light[counter].firstLed; ledCounter < light[counter].firstLed + light[counter].numLeds; ledCounter++) {
+            //leds[ledCounter] = CRGB::Black;
+            leds.setPixelColor(ledCounter, light[counter].fill_color);
+          }
+
+        break;
+      }
+
     }
+
   }
+
   //needs a redraw
   fadeLeds();
   if(reDraw==1 or 1){
@@ -313,13 +368,36 @@ void loop() {
     leds.show();
     reDraw=0;
   }
+
   //check all the buttons
   for (int counter = 1; counter < buttonInputNum; counter++) {
     //if oldstate does NOT !equal new readstate do something
     if (button[counter].oldState != digitalRead(button[counter].microInput)) {
       button[counter].oldState = digitalRead(button[counter].microInput);
-      //send button state to joystick using oposite new oldstate since !(HIGH=1)=0 and !(LOW=0)=1
-      Joystick.button(button[counter].usbButton, !button[counter].oldState);
+
+      if(counter==buttonConfig){
+
+        if(!button[counter].oldState){ //if held
+
+          held_timer=millis();
+          blackout_mode = !blackout_mode;
+
+        }
+
+      }else{
+
+        //send button state to joystick using oposite new oldstate since !(HIGH=1)=0 and !(LOW=0)=1
+        Joystick.button(button[counter].usbButton, !button[counter].oldState);
+      }
+
     }
+
+    if(!button[buttonConfig].oldState && (held_timer+shutdown_hold_time)>millis()){ //if held for shutdown time
+
+      Keyboard.press(KEY_SYSTEM_POWER_DOWN);
+      Keyboard.release(KEY_SYSTEM_POWER_DOWN);
+
+    }
+
   }
 }
