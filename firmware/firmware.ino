@@ -319,22 +319,20 @@ void loop() {
 
       pac[counter].oldState = current_pin_state;
 
-      if (current_pin_state) {
+      if (!current_pin_state) {
 
-        r=g=b=0;
-
-      }else{
+        //r=g=b=0;
 
         HSV_to_RGB((random(360)/360.0)*360.0,100.0f,50.0f,&r,&g,&b);
-        
-      }
 
-      light[counter].fill_color = leds.Color(r,g,b);
-      pac[counter].onOff = !current_pin_state;
+        light[counter].fill_color = leds.Color(r,g,b);
+        pac[counter].onOff = !current_pin_state;
 
-      for (int16_t ledCounter = light[counter].firstLed; ledCounter < light[counter].firstLed + light[counter].numLeds; ledCounter++) {
-        //leds[ledCounter] = CRGB::Black;
-        leds.setPixelColor(ledCounter, light[counter].fill_color);
+        for (int16_t ledCounter = light[counter].firstLed; ledCounter < light[counter].firstLed + light[counter].numLeds; ledCounter++) {
+          //leds[ledCounter] = CRGB::Black;
+          leds.setPixelColor(ledCounter, light[counter].fill_color);
+        }        
+
       }
 
     }else if(!current_pin_state){//if pac pad button pressed hold color
