@@ -10,7 +10,7 @@
 
 #define NUM_LEDS 492
 #define DATA_PIN 39
-#define LED_REFRESH_RATE 120
+#define LED_REFRESH_RATE 30
 //CRGB leds[NUM_LEDS];
 Adafruit_NeoPixel leds = Adafruit_NeoPixel(NUM_LEDS, DATA_PIN, NEO_GRB + NEO_KHZ800);
 
@@ -218,6 +218,7 @@ void setup() {
 int reDraw=0;
 
 void fadeLeds(){
+  static float fade_amount = 0.60-(1/LED_REFRESH_RATE) 
   uint8_t r,g,b;
   for(int x=0;x<NUM_LEDS;x++){
     r=(leds.getPixelColor(x) >> 16);
@@ -364,12 +365,13 @@ void loop() {
   }
 
   //needs a redraw
-  fadeLeds();
+  
 
   static unsigned long last_update;
   
   if(reDraw==1 or last_update<millis()){
     //FastLED.show();
+    fadeLeds();
     leds.show();
     reDraw=0;
     last_update=millis()+(1000/LED_REFRESH_RATE);
