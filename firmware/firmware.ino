@@ -10,8 +10,12 @@
 
 #define NUM_LEDS 492
 #define DATA_PIN 39
+#define LED_REFRESH_RATE 120
 //CRGB leds[NUM_LEDS];
 Adafruit_NeoPixel leds = Adafruit_NeoPixel(NUM_LEDS, DATA_PIN, NEO_GRB + NEO_KHZ800);
+
+
+
 
 unsigned long lastbutton = 0;
 int attractmode = 0;
@@ -361,10 +365,14 @@ void loop() {
 
   //needs a redraw
   fadeLeds();
-  if(reDraw==1 or 1){
+
+  static unsigned long last_update;
+  
+  if(reDraw==1 or last_update<millis()){
     //FastLED.show();
     leds.show();
     reDraw=0;
+    last_update=millis()+(1000/LED_REFRESH_RATE);
   }
 
   //check all the buttons
