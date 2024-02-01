@@ -218,20 +218,20 @@ void setup() {
 int reDraw=0;
 
 void fadeLeds(){
-  static float fade_amount = 0.60-(1/LED_REFRESH_RATE) 
+  static float fade_amount = 0.60-(1.0/LED_REFRESH_RATE); 
   uint8_t r,g,b;
   for(int x=0;x<NUM_LEDS;x++){
     r=(leds.getPixelColor(x) >> 16);
     g=(leds.getPixelColor(x) >> 8);
     b=(leds.getPixelColor(x));
     if(r > 0){
-      r = int(r *0.90);
+      r = int(r *fade_amount);
     }
     if(g> 0){
-      g = int(g *0.90);
+      g = int(g *fade_amount);
     }
     if(b > 0){
-      b = int(b *0.90);
+      b = int(b *fade_amount);
     }
     leds.setPixelColor(x,r,g,b);
   }
